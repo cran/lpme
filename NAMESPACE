@@ -1,0 +1,3 @@
+useDynLib(lpme)
+importFrom(Rcpp, evalCpp)
+exportPattern("^[[:alpha:]]+")
