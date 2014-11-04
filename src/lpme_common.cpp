@@ -161,7 +161,7 @@ void gnewLap(NumericVector& ghatofx, const NumericVector& x, const NumericVector
   // Make arma objects
   arma::vec gWin(gWinput.begin(), m, false);
   arma::vec fWin(fWinput.begin(), m, false);
-  arma::vec mcon(mconst.begin(), m, false);
+  arma::vec mcon(const_cast<NumericVector&>(mconst).begin(), m, false);
   
   // FFT for fW
   arma::vec Xin=mcon%fWin;
@@ -228,7 +228,7 @@ void gnewGau(NumericVector& ghatofx, const NumericVector& x, const NumericVector
   // Make arma objects
   arma::vec gWin(gWinput.begin(), m, false);
   arma::vec fWin(fWinput.begin(), m, false);
-  arma::vec mcon(mconst.begin(), m, false);
+  arma::vec mcon(const_cast<NumericVector&>(mconst).begin(), m, false);
   
   // FFT for fW
   arma::vec Xin=mcon%fWin;

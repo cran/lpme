@@ -1,4 +1,4 @@
-8a24aabe6235e1a21611d9133ad80066 *DESCRIPTION
+272ed32cdc3a7ed30c45efbddd6cd028 *DESCRIPTION
 062b063c1141c314bc4626c1fa5ce079 *NAMESPACE
 8aa0d7dd1aa2abae11d58eef4627caa4 *R/bwSIMEX.R
 53cfe5d8f3e65200425c3b49cab23e56 *R/lpme.R
@@ -7,7 +7,7 @@
 3f61f2f114aa27046aaab1c26afa9b1b *man/lpme.Rd
 95a5e0dc5dbdec9c251c142cb4cad286 *src/Makevars
 64be831ee13c45351b4d0839e550b59a *src/Makevars.win
-ef91b3a472cfa04f47e79cc2ef2c93b2 *src/lpme_common.cpp
+8c3bc654ffdbf88916a78c0ec2e02b8e *src/lpme_common.cpp
 72147deaa4e38a686199f8db20b4a9cc *src/lpme_common.h
 3070fe72ca609b062526cb0371d64b5a *src/lpme_gjasa.cpp
 abc1bd5c7451e4ad86a395e9d67f811a *src/lpme_gjasa.h
