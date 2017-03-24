@@ -12,6 +12,12 @@ NumericVector FuLap(NumericVector t, double sigU){
 NumericVector FuGau(NumericVector t, double sigU){
   return( Rcpp::exp(-Rcpp::pow((sigU*t),2)*0.5) );
 }
+NumericVector FuLapinv(NumericVector t, double sigU){
+  return((1.0+Rcpp::pow((sigU*t),2)*0.5));
+}
+NumericVector FuGauinv(NumericVector t, double sigU){
+  return( Rcpp::exp(Rcpp::pow((sigU*t),2)*0.5) );
+}
 
 // Fourier transform for Kernel K
 NumericVector FK(NumericVector t){
@@ -25,7 +31,23 @@ NumericVector FK1(NumericVector t){
 
 // second derivative for Fourier transform of Kernel K
 NumericVector FK2(NumericVector t){
-  return(-16.0*Rcpp::pow((1.0-Rcpp::pow(t,2)), 7) + 16.0*14.0*t*t*Rcpp::pow((1.0-Rcpp::pow(t,2)), 6));
+  NumericVector t2 = Rcpp::pow(t,2);
+  return( Rcpp::pow((1.0-t2), 6)*(240.0*t2-16.0) );
+}
+
+// Fourier transform for Kernel K
+NumericVector FK_sec_order(NumericVector t){
+  return(Rcpp::pow((1.0-Rcpp::pow(t,2)), 3) );
+}
+
+// first derivative for Fourier transform of Kernel K
+NumericVector FK1_sec_order(NumericVector t){
+  return(-6.0*t*Rcpp::pow((1.0-Rcpp::pow(t,2)), 2));
+}
+
+// second derivative for Fourier transform of Kernel K
+NumericVector FK2_sec_order(NumericVector t){
+  return( ( 1.0-Rcpp::pow(t,2) )*( 30.0*Rcpp::pow(t,2)-6.0 ) );
 }
 
 // function to generate subvectors a[-(ind1:ind2)] and b[-(ind1:ind2)] and save them to w and y respectively
@@ -72,12 +94,12 @@ void gjasaLap(NumericVector& res, const NumericVector& x, const NumericVector& t
     NumericVector rext = Rcpp::cos(x[i]*t/h);
     NumericVector imxt = Rcpp::sin(x[i]*t/h);
     NumericVector tmp0 = rehatFW*rext + imhatFW*imxt;
-    NumericVector tmp1 = -rehatFW*imxt + imhatFW*rext;
+    NumericVector tmp1 = rehatFW*imxt - imhatFW*rext;
     double S0 = Rcpp::sum(tmp0*FKt/FUt)*dt/(n*h*2*PI);
     double S1 = Rcpp::sum(tmp1*FKt1/FUt)*dt/(n*h*2*PI);
     double S2 = -Rcpp::sum(tmp0*FKt2/FUt)*dt/(n*h*2*PI);
     double T0 = Rcpp::sum((reYhatFW*rext + imYhatFW*imxt)*FKt/FUt)*dt/(n*h*2*PI);
-    double T1 = Rcpp::sum((-reYhatFW*imxt + imYhatFW*rext)*FKt1/FUt)*dt/(n*h*2*PI);
+    double T1 = Rcpp::sum((reYhatFW*imxt - imYhatFW*rext)*FKt1/FUt)*dt/(n*h*2*PI);
     res[i] = (T0*S2-T1*S1)/(S0*S2-S1*S1+1e-30);
   }
 }

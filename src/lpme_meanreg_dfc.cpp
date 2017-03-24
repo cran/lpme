@@ -1,5 +1,4 @@
-#include "lpme_gjasa.h"
-
+#include "lpme_common.h"
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
 
@@ -8,7 +7,7 @@ using namespace Rcpp;
 using namespace std;
 
 // estimate g function JASA when error is laplace
-SEXP fitjasaLap( SEXP x_, SEXP h_, SEXP W_, SEXP Y_, SEXP sigU_, SEXP dt_, SEXP t_) {
+RcppExport SEXP fitjasaLap( SEXP x_, SEXP h_, SEXP W_, SEXP Y_, SEXP sigU_, SEXP dt_, SEXP t_) {
 	BEGIN_RCPP
   
 	// Transfer R variables into C++;
@@ -24,7 +23,7 @@ SEXP fitjasaLap( SEXP x_, SEXP h_, SEXP W_, SEXP Y_, SEXP sigU_, SEXP dt_, SEXP 
   // results to save 
   NumericVector res(nx);
 	
-	GetRNGstate();
+	RNGScope scope;
   
 	// Set the Armadillo seed from R's 
 	//int seed = (int)Rf_runif(0.0, 10000.0);
@@ -34,12 +33,11 @@ SEXP fitjasaLap( SEXP x_, SEXP h_, SEXP W_, SEXP Y_, SEXP sigU_, SEXP dt_, SEXP 
   gjasaLap(res, x, t, dt, W, Y, sigU, h);
   
   return List::create(Named("ghat")=res);
-	PutRNGstate();
 	END_RCPP
 }
 
 // estimate g function JASA when error is Gaussian
-SEXP fitjasaGau( SEXP x_, SEXP h_, SEXP W_, SEXP Y_, SEXP sigU_, SEXP dt_, SEXP t_) {
+RcppExport SEXP fitjasaGau( SEXP x_, SEXP h_, SEXP W_, SEXP Y_, SEXP sigU_, SEXP dt_, SEXP t_) {
   BEGIN_RCPP
   
 	// Transfer R variables into C++;
@@ -55,7 +53,7 @@ SEXP fitjasaGau( SEXP x_, SEXP h_, SEXP W_, SEXP Y_, SEXP sigU_, SEXP dt_, SEXP 
   // results to save 
   NumericVector res(nx);
 	
-	GetRNGstate();
+	RNGScope scope;
   
 	// Set the Armadillo seed from R's 
 	//int seed = (int)Rf_runif(0.0, 10000.0);
@@ -65,12 +63,11 @@ SEXP fitjasaGau( SEXP x_, SEXP h_, SEXP W_, SEXP Y_, SEXP sigU_, SEXP dt_, SEXP 
   gjasaGau(res, x, t, dt, W, Y, sigU, h);
   
   return List::create(Named("ghat")=res);
-	PutRNGstate();
 	END_RCPP
 }
 
 // SIMEX bandwidth selection when error is laplace
-SEXP SIMEXjasaLap(SEXP W_, SEXP Y_, SEXP Ws_, SEXP Wss_, SEXP h1_, SEXP h2_, SEXP sigU_, SEXP cumfold_, 
+RcppExport SEXP SIMEXjasaLap(SEXP W_, SEXP Y_, SEXP Ws_, SEXP Wss_, SEXP h1_, SEXP h2_, SEXP sigU_, SEXP cumfold_, 
                   SEXP pW_, SEXP pWs_, SEXP dt_, SEXP t_) {
   BEGIN_RCPP
   
@@ -96,7 +93,7 @@ SEXP SIMEXjasaLap(SEXP W_, SEXP Y_, SEXP Ws_, SEXP Wss_, SEXP h1_, SEXP h2_, SEX
   NumericVector CVh1(nh1);
   NumericVector CVh2(nh2);
   
-  GetRNGstate();
+  RNGScope scope;
 	
   // start SIMEX 
   for (int i=0; i<nh1; ++i){
@@ -161,12 +158,11 @@ SEXP SIMEXjasaLap(SEXP W_, SEXP Y_, SEXP Ws_, SEXP Wss_, SEXP h1_, SEXP h2_, SEX
                     Named("CVh1")=CVh1,
                     Named("h2")=h2,
                     Named("CVh2")=CVh2);
-	PutRNGstate();
 	END_RCPP
 }
 
 // SIMEX bandwidth selection when error is Gaussian
-SEXP SIMEXjasaGau(SEXP W_, SEXP Y_, SEXP Ws_, SEXP Wss_, SEXP h1_, SEXP h2_, SEXP sigU_, SEXP cumfold_, 
+RcppExport SEXP SIMEXjasaGau(SEXP W_, SEXP Y_, SEXP Ws_, SEXP Wss_, SEXP h1_, SEXP h2_, SEXP sigU_, SEXP cumfold_, 
                   SEXP pW_, SEXP pWs_, SEXP dt_, SEXP t_) {
   BEGIN_RCPP
   
@@ -192,7 +188,7 @@ SEXP SIMEXjasaGau(SEXP W_, SEXP Y_, SEXP Ws_, SEXP Wss_, SEXP h1_, SEXP h2_, SEX
   NumericVector CVh1(nh1);
   NumericVector CVh2(nh2);
   
-  GetRNGstate();
+  RNGScope scope;
   
   // start SIMEX 
   for (int i=0; i<nh1; ++i){
@@ -257,7 +253,6 @@ SEXP SIMEXjasaGau(SEXP W_, SEXP Y_, SEXP Ws_, SEXP Wss_, SEXP h1_, SEXP h2_, SEX
                     Named("CVh1")=CVh1,
                     Named("h2")=h2,
                     Named("CVh2")=CVh2);
-	PutRNGstate();
 	END_RCPP
 }
 

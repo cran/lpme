@@ -1,3 +1,7 @@
-useDynLib(lpme)
+useDynLib(lpme, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
+importFrom("graphics", "points", "plot")
+importFrom("stats", "cutree", "density", "dist", "dnorm", "fft",
+           "hclust", "integrate", "predict", "rnorm", "runif",
+           "splinefun", "quantile", "sd")
 exportPattern("^[[:alpha:]]+")
