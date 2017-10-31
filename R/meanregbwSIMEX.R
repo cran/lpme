@@ -1,4 +1,4 @@
-"meanreg_bwSIMEX" <- function(Y, W, method="HZ", sig, error="laplace", k_fold=2, B=10, 
+"meanregbwSIMEX" <- function(Y, W, method="HZ", sig, error="laplace", k_fold=5, B=10, 
                       h1=NULL, h2=NULL, length.h=10, lconst=0.5, rconst=2, Wdiff=NULL){
   #########################################################################################
   # data structure
@@ -172,6 +172,6 @@
                  CVh1=foo$CVh1,
                  h2=foo$h2,
                  CVh2=foo$CVh2);
-  class(output) <- c("meanreg_bwSIMEX")
+  class(output) <- c("meanregbwSIMEX")
   output
 }

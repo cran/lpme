@@ -3,5 +3,6 @@ importFrom(Rcpp, evalCpp)
 importFrom("graphics", "points", "plot")
 importFrom("stats", "cutree", "density", "dist", "dnorm", "fft",
            "hclust", "integrate", "predict", "rnorm", "runif",
-           "splinefun", "quantile", "sd")
+           "splinefun", "quantile", "sd", "lm", "var", "cor")
+importFrom("splines", "ns")
 exportPattern("^[[:alpha:]]+")

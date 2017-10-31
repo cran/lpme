@@ -6,53 +6,66 @@ using namespace Rcpp ;
 using namespace std;
 
 // Fourier transform for error U
-NumericVector FuLap(NumericVector t, double sigU){
+Rcpp::NumericVector FuLap(Rcpp::NumericVector t, double sigU){
   return(1.0/(1.0+Rcpp::pow((sigU*t),2)*0.5));
 }
-NumericVector FuGau(NumericVector t, double sigU){
+Rcpp::NumericVector FuGau(Rcpp::NumericVector t, double sigU){
   return( Rcpp::exp(-Rcpp::pow((sigU*t),2)*0.5) );
 }
-NumericVector FuLapinv(NumericVector t, double sigU){
+Rcpp::NumericVector FuLapinv(Rcpp::NumericVector t, double sigU){
   return((1.0+Rcpp::pow((sigU*t),2)*0.5));
 }
-NumericVector FuGauinv(NumericVector t, double sigU){
+Rcpp::NumericVector FuGauinv(Rcpp::NumericVector t, double sigU){
   return( Rcpp::exp(Rcpp::pow((sigU*t),2)*0.5) );
 }
 
 // Fourier transform for Kernel K
-NumericVector FK(NumericVector t){
+Rcpp::NumericVector FK(Rcpp::NumericVector t){
   return(Rcpp::pow((1.0-Rcpp::pow(t,2)), 8) );
 }
 
 // first derivative for Fourier transform of Kernel K
-NumericVector FK1(NumericVector t){
+Rcpp::NumericVector FK1(Rcpp::NumericVector t){
   return(-16.0*t*Rcpp::pow((1.0-Rcpp::pow(t,2)), 7));
 }
 
 // second derivative for Fourier transform of Kernel K
-NumericVector FK2(NumericVector t){
-  NumericVector t2 = Rcpp::pow(t,2);
+Rcpp::NumericVector FK2(Rcpp::NumericVector t){
+  Rcpp::NumericVector t2 = Rcpp::pow(t,2);
   return( Rcpp::pow((1.0-t2), 6)*(240.0*t2-16.0) );
 }
 
-// Fourier transform for Kernel K
-NumericVector FK_sec_order(NumericVector t){
+// second-order Kernel K
+double K_sec_order(double x){
+  double res=0;
+  double xi = std::abs(x);
+  if(xi<0.2){
+    res = 0.1455068+0.0000996*xi+ -0.0084387*std::pow(xi,2);
+  }else{
+    res = 48.0*std::cos(xi)/(PI*std::pow(xi,4))*(1.0-15.0/std::pow(xi,2)) - 
+      144*std::sin(xi)/(PI*std::pow(xi,5))*(2.0-5.0/std::pow(xi,2));
+  }
+  return(res);
+}
+
+// Fourier transform for second-order Kernel K
+Rcpp::NumericVector FK_sec_order(Rcpp::NumericVector t){
   return(Rcpp::pow((1.0-Rcpp::pow(t,2)), 3) );
 }
 
 // first derivative for Fourier transform of Kernel K
-NumericVector FK1_sec_order(NumericVector t){
+Rcpp::NumericVector FK1_sec_order(Rcpp::NumericVector t){
   return(-6.0*t*Rcpp::pow((1.0-Rcpp::pow(t,2)), 2));
 }
 
 // second derivative for Fourier transform of Kernel K
-NumericVector FK2_sec_order(NumericVector t){
+Rcpp::NumericVector FK2_sec_order(Rcpp::NumericVector t){
   return( ( 1.0-Rcpp::pow(t,2) )*( 30.0*Rcpp::pow(t,2)-6.0 ) );
 }
 
 // function to generate subvectors a[-(ind1:ind2)] and b[-(ind1:ind2)] and save them to w and y respectively
 // void allows more than two values can be returned. For example, w and y are returned here.
-void subvecij(const NumericVector& a, const NumericVector& b, int ind1, int ind2, NumericVector& w, NumericVector& y){
+void subvecij(const Rcpp::NumericVector& a, const Rcpp::NumericVector& b, int ind1, int ind2, Rcpp::NumericVector& w, Rcpp::NumericVector& y){
   int ny = y.size();
   for (int i=0; i<ny; ++i){
     if(i<ind1) {
@@ -66,24 +79,24 @@ void subvecij(const NumericVector& a, const NumericVector& b, int ind1, int ind2
 }
 
 // function to estimate ghat of x using JASA when U is laplace
-void gjasaLap(NumericVector& res, const NumericVector& x, const NumericVector& t, double dt, const NumericVector& W, 
-      const NumericVector& Y, double sigU, double h){
+void gjasaLap(Rcpp::NumericVector& res, const Rcpp::NumericVector& x, const Rcpp::NumericVector& t, double dt, const Rcpp::NumericVector& W, 
+      const Rcpp::NumericVector& Y, double sigU, double h){
   int nt = t.size();
   int n = W.size();
   int nx = x.size();
-  NumericVector rehatFW(nt); 
-  NumericVector imhatFW(nt);
-  NumericVector reYhatFW(nt);
-  NumericVector imYhatFW(nt);
-  NumericVector FKt = FK(t);
-  NumericVector FKt1= FK1(t);
-  NumericVector FKt2= FK2(t);
-  NumericVector FUt = FuLap(t/h, sigU);
+  Rcpp::NumericVector rehatFW(nt); 
+  Rcpp::NumericVector imhatFW(nt);
+  Rcpp::NumericVector reYhatFW(nt);
+  Rcpp::NumericVector imYhatFW(nt);
+  Rcpp::NumericVector FKt = FK(t);
+  Rcpp::NumericVector FKt1= FK1(t);
+  Rcpp::NumericVector FKt2= FK2(t);
+  Rcpp::NumericVector FUt = FuLap(t/h, sigU);
   for (int i=0; i<nt; i++){
     R_CheckUserInterrupt();
     double ti = t[i];
-    NumericVector csW = Rcpp::cos(W*ti/h);
-    NumericVector snW = Rcpp::sin(W*ti/h);
+    Rcpp::NumericVector csW = Rcpp::cos(W*ti/h);
+    Rcpp::NumericVector snW = Rcpp::sin(W*ti/h);
     rehatFW[i] = Rcpp::sum(csW);
     imhatFW[i] = Rcpp::sum(snW);
     reYhatFW[i] = Rcpp::sum(Y*csW);
@@ -91,10 +104,10 @@ void gjasaLap(NumericVector& res, const NumericVector& x, const NumericVector& t
   }
   for (int i=0; i<nx; i++){
     R_CheckUserInterrupt();
-    NumericVector rext = Rcpp::cos(x[i]*t/h);
-    NumericVector imxt = Rcpp::sin(x[i]*t/h);
-    NumericVector tmp0 = rehatFW*rext + imhatFW*imxt;
-    NumericVector tmp1 = rehatFW*imxt - imhatFW*rext;
+    Rcpp::NumericVector rext = Rcpp::cos(x[i]*t/h);
+    Rcpp::NumericVector imxt = Rcpp::sin(x[i]*t/h);
+    Rcpp::NumericVector tmp0 = rehatFW*rext + imhatFW*imxt;
+    Rcpp::NumericVector tmp1 = rehatFW*imxt - imhatFW*rext;
     double S0 = Rcpp::sum(tmp0*FKt/FUt)*dt/(n*h*2*PI);
     double S1 = Rcpp::sum(tmp1*FKt1/FUt)*dt/(n*h*2*PI);
     double S2 = -Rcpp::sum(tmp0*FKt2/FUt)*dt/(n*h*2*PI);
@@ -105,24 +118,24 @@ void gjasaLap(NumericVector& res, const NumericVector& x, const NumericVector& t
 }
 
 // function to estimate ghat of x using JASA when U is Gaussian
-void gjasaGau(NumericVector& res, const NumericVector& x, const NumericVector& t, double dt, const NumericVector& W, 
-      const NumericVector& Y, double sigU, double h){
+void gjasaGau(Rcpp::NumericVector& res, const Rcpp::NumericVector& x, const Rcpp::NumericVector& t, double dt, const Rcpp::NumericVector& W, 
+      const Rcpp::NumericVector& Y, double sigU, double h){
   int nt = t.size();
   int n = W.size();
   int nx = x.size();
-  NumericVector rehatFW(nt); 
-  NumericVector imhatFW(nt);
-  NumericVector reYhatFW(nt);
-  NumericVector imYhatFW(nt);
-  NumericVector FKt = FK(t);
-  NumericVector FKt1= FK1(t);
-  NumericVector FKt2= FK2(t);
-  NumericVector FUt = FuGau(t/h, sigU);
+  Rcpp::NumericVector rehatFW(nt); 
+  Rcpp::NumericVector imhatFW(nt);
+  Rcpp::NumericVector reYhatFW(nt);
+  Rcpp::NumericVector imYhatFW(nt);
+  Rcpp::NumericVector FKt = FK(t);
+  Rcpp::NumericVector FKt1= FK1(t);
+  Rcpp::NumericVector FKt2= FK2(t);
+  Rcpp::NumericVector FUt = FuGau(t/h, sigU);
   for (int i=0; i<nt; i++){
     R_CheckUserInterrupt();
     double ti = t[i];
-    NumericVector csW = Rcpp::cos(W*ti/h);
-    NumericVector snW = Rcpp::sin(W*ti/h);
+    Rcpp::NumericVector csW = Rcpp::cos(W*ti/h);
+    Rcpp::NumericVector snW = Rcpp::sin(W*ti/h);
     rehatFW[i] = Rcpp::sum(csW);
     imhatFW[i] = Rcpp::sum(snW);
     reYhatFW[i] = Rcpp::sum(Y*csW);
@@ -130,10 +143,10 @@ void gjasaGau(NumericVector& res, const NumericVector& x, const NumericVector& t
   }
   for (int i=0; i<nx; i++){
     R_CheckUserInterrupt();
-    NumericVector rext = Rcpp::cos(x[i]*t/h);
-    NumericVector imxt = Rcpp::sin(x[i]*t/h);
-    NumericVector tmp0 = rehatFW*rext + imhatFW*imxt;
-    NumericVector tmp1 = -rehatFW*imxt + imhatFW*rext;
+    Rcpp::NumericVector rext = Rcpp::cos(x[i]*t/h);
+    Rcpp::NumericVector imxt = Rcpp::sin(x[i]*t/h);
+    Rcpp::NumericVector tmp0 = rehatFW*rext + imhatFW*imxt;
+    Rcpp::NumericVector tmp1 = -rehatFW*imxt + imhatFW*rext;
     double S0 = Rcpp::sum(tmp0*FKt/FUt)*dt/(n*h*2*PI);
     double S1 = Rcpp::sum(tmp1*FKt1/FUt)*dt/(n*h*2*PI);
     double S2 = -Rcpp::sum(tmp0*FKt2/FUt)*dt/(n*h*2*PI);
@@ -144,26 +157,26 @@ void gjasaGau(NumericVector& res, const NumericVector& x, const NumericVector& t
 }
 
 // function to estimate ghat of x using OURS when error is Laplace
-void gnewLap(NumericVector& ghatofx, const NumericVector& x, const NumericVector& input, const NumericVector& output, 
-        double beta, double beta2, const NumericVector& mconst, const NumericVector& Kinput, 
-        const NumericVector& W, const NumericVector& Y, double sigU, double h){
+void gnewLap(Rcpp::NumericVector& ghatofx, const Rcpp::NumericVector& x, const Rcpp::NumericVector& input, const Rcpp::NumericVector& output, 
+        double beta, double beta2, const Rcpp::NumericVector& mconst, const Rcpp::NumericVector& Kinput, 
+        const Rcpp::NumericVector& W, const Rcpp::NumericVector& Y, double sigU, double h){
   int m = input.size();
   int m_mid = m/2 +1; 
   int n = W.size();
-  NumericVector gWinput(m);
-  NumericVector fWinput(m);
+  Rcpp::NumericVector gWinput(m);
+  Rcpp::NumericVector fWinput(m);
   double nh = n*h;
   for (int i=0; i<m; ++i){
     R_CheckUserInterrupt();
     double x0 = input[i];
-    NumericVector a = (x0-W)/h;
-    NumericVector a0(n);
+    Rcpp::NumericVector a = (x0-W)/h;
+    Rcpp::NumericVector a0(n);
     for (int j=0; j<n; ++j){
       int indx = (int)(round(a[j]/beta+m_mid));
       a0[j] = ((indx<=m) & (indx>=1))? Kinput[indx-1]:0 ;
     }
-    NumericVector a1 = a0*a;
-    NumericVector a2 = a1*a;
+    Rcpp::NumericVector a1 = a0*a;
+    Rcpp::NumericVector a2 = a1*a;
     double S0=Rcpp::sum(a0)/(nh);
     double S1=Rcpp::sum(a1)/(nh);
     double S2=Rcpp::sum(a2)/(nh);
@@ -183,7 +196,7 @@ void gnewLap(NumericVector& ghatofx, const NumericVector& x, const NumericVector
   // Make arma objects
   arma::vec gWin(gWinput.begin(), m, false);
   arma::vec fWin(fWinput.begin(), m, false);
-  arma::vec mcon(const_cast<NumericVector&>(mconst).begin(), m, false);
+  arma::vec mcon(const_cast<Rcpp::NumericVector&>(mconst).begin(), m, false);
   
   // FFT for fW
   arma::vec Xin=mcon%fWin;
@@ -193,7 +206,7 @@ void gnewLap(NumericVector& ghatofx, const NumericVector& x, const NumericVector
   arma::cx_vec FgWfW=beta*mcon%arma::fft( mcon%gWin%fWin )%support;
   
   // FfU
-  NumericVector FfU=FuLap(output, sigU);
+  Rcpp::NumericVector FfU=FuLap(output, sigU);
   arma::vec FfU2(FfU.begin(), FfU.size(), false);
   
   // inverse FFT to get fX
@@ -214,26 +227,26 @@ void gnewLap(NumericVector& ghatofx, const NumericVector& x, const NumericVector
 }
 
 // function to estimate ghat of x using OURS when error is Gaussian
-void gnewGau(NumericVector& ghatofx, const NumericVector& x, const NumericVector& input, const NumericVector& output, 
-        double beta, double beta2, const NumericVector& mconst, const NumericVector& Kinput, 
-        const NumericVector& W, const NumericVector& Y, double sigU, double h){
+void gnewGau(Rcpp::NumericVector& ghatofx, const Rcpp::NumericVector& x, const Rcpp::NumericVector& input, const Rcpp::NumericVector& output, 
+        double beta, double beta2, const Rcpp::NumericVector& mconst, const Rcpp::NumericVector& Kinput, 
+        const Rcpp::NumericVector& W, const Rcpp::NumericVector& Y, double sigU, double h){
   int m = input.size();
   int m_mid = m/2 +1; 
   int n = W.size();
-  NumericVector gWinput(m);
-  NumericVector fWinput(m);
+  Rcpp::NumericVector gWinput(m);
+  Rcpp::NumericVector fWinput(m);
   double nh = n*h;
   for (int i=0; i<m; ++i){
     R_CheckUserInterrupt();
     double x0 = input[i];
-    NumericVector a = (x0-W)/h;
-    NumericVector a0(n);
+    Rcpp::NumericVector a = (x0-W)/h;
+    Rcpp::NumericVector a0(n);
     for (int j=0; j<n; ++j){
       int indx = (int)(round(a[j]/beta+m_mid));
       a0[j] = ((indx<=m) & (indx>=1))? Kinput[indx-1]:0 ;
     }
-    NumericVector a1 = a0*a;
-    NumericVector a2 = a1*a;
+    Rcpp::NumericVector a1 = a0*a;
+    Rcpp::NumericVector a2 = a1*a;
     double S0=Rcpp::sum(a0)/(nh);
     double S1=Rcpp::sum(a1)/(nh);
     double S2=Rcpp::sum(a2)/(nh);
@@ -250,7 +263,7 @@ void gnewGau(NumericVector& ghatofx, const NumericVector& x, const NumericVector
   // Make arma objects
   arma::vec gWin(gWinput.begin(), m, false);
   arma::vec fWin(fWinput.begin(), m, false);
-  arma::vec mcon(const_cast<NumericVector&>(mconst).begin(), m, false);
+  arma::vec mcon(const_cast<Rcpp::NumericVector&>(mconst).begin(), m, false);
   
   // FFT for fW
   arma::vec Xin=mcon%fWin;
@@ -260,7 +273,7 @@ void gnewGau(NumericVector& ghatofx, const NumericVector& x, const NumericVector
   arma::cx_vec FgWfW=beta*mcon%arma::fft( mcon%gWin%fWin );
   
   // FfU
-  NumericVector FfU=FuGau(output, sigU);
+  Rcpp::NumericVector FfU=FuGau(output, sigU);
   arma::vec FfU2(FfU.begin(), FfU.size(), false);
   //(FfU2.elem( arma::find_nonfinite(FfU2>1e-30) )).fill(0);
   

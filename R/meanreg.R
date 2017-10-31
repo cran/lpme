@@ -1,8 +1,10 @@
-"meanreg" <- function(Y, W, bw, method="HZ", sig=NULL, error="laplace", FT_fu,
-                      xgrid=seq(min(W), max(W), length.out = 100)){
+"meanreg" <- function(Y, W, bw, xgrid=NULL, method="HZ", sig=NULL, error="laplace", FT_fu){
   #########################################################################################
   # data structure
   #########################################################################################
+  if(is.null(xgrid)){
+    xgrid = seq(quantile(W, probs=0.025), quantile(W,probs=0.975), length.out = 100);
+  }
   xmin  = min(xgrid);
   xmax  = max(xgrid);
   m  = 2^16; m_mid = m/2+1;

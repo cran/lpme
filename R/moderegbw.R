@@ -1,6 +1,6 @@
-"modereg_bw" <- function(Y, X, method="CV-density", p.order=0, h1=NULL, h2=NULL, nstart = 4,
+"moderegbw" <- function(Y, X, method="CV-density", p.order=0, h1=NULL, h2=NULL, nstart = 4,
                          xinterval = quantile(X, probs=c(0.025, 0.975), names = FALSE),
-                         df=5, ncomp=2, nboot=5){
+                         df=5, ncomp=5, nboot=5){
   #########################################################################################
   # data structure
   #########################################################################################
@@ -137,6 +137,6 @@
   hhxy = as.vector(band.h[which.min(as.vector(CV)),]);
   output <- list(bw = hhxy,
                  CV = CV);
-  class(output) <- c("modereg_bw")
+  class(output) <- c("moderegbw")
   output
 }

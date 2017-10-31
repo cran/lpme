@@ -1,13 +1,13 @@
 \name{modereg}
 \alias{modereg}
 
-\title{Local Polynomial Estimators for Nonparametric Mode Regression}
+\title{Nonparametric Estimators for Nonparametric Mode Regression}
 \description{
-This function provides the local polynomial estimators (Zhou and Huang, 2016; Zhou and Huang, 2017) for nonparametric modal regression. The corresponding estimators in the absence of measurement error are also provided. 
+This function provides the nonparametric estimators (Zhou and Huang, 2016; Zhou and Huang, 2018) for nonparametric modal regression. The corresponding estimators in the absence of measurement error are also provided. 
 }
    
 \usage{
-modereg(Y, W, xgrid=NULL, nstart=4, bw=NULL, p.order=0, sig=NULL, maxiter = 500,
+modereg(Y, W, bw, xgrid=NULL, sig=NULL, nstart=4, p.order=0, maxiter = 500, 
         tol=.Machine$double.eps^0.25, mesh=NULL, PLOT=FALSE, ...)
 }
 
@@ -16,15 +16,15 @@ modereg(Y, W, xgrid=NULL, nstart=4, bw=NULL, p.order=0, sig=NULL, maxiter = 500,
    
    \item{W}{         an n by 1 predictor vector.} 
    
+   \item{bw}{        bandwidth.} 
+   
    \item{xgrid}{     the grid values to estimate the responses.}
+   
+   \item{sig}{      standard deviation of the measurement error; \code{sig=NULL} returns the naive estimators ignoring measurement error.} 
    
    \item{nstart}{    the starting number of modes for each grid value.}
    
-   \item{bw}{        bandwidth.} 
-   
    \item{p.order}{   the order of polynomial, up to 1; \code{p.order=0} returns local constant estimators and \code{p.order=1} returns local linear estimators. }
-
-    \item{sig}{      standard deviation of the measurement error; \code{sig=NULL} returns the naive estimators ignoring measurement error.} 
     
     \item{maxiter}{  the maximum number of iterations performed for the mean shift algorithm if not converage.} 
     
@@ -43,14 +43,13 @@ The results include the grid points \code{xgrid} for predictor, the number of mo
 }
 
 \seealso{
-\code{\link{modereg_bwSIMEX},\link{modereg_bw}}
+\code{\link{moderegbwSIMEX},\link{moderegbw}}
 }
 
 \references{
 Zhou. H. and Huang, X. (2016). Nonparametric modal regression in the presence of measurement error. \emph{Electronic Journal of Statistics}, 10: 3579-3620.
 
-Zhou, H. and Huang, X. (2017). Bandwidth selection for nonparametric modal regression. \emph{Journal
-of Statistical Computation and Simulation}, submitted.
+Zhou, H. and Huang, X. (2018). Bandwidth selection for nonparametric modal regression. \emph{Communications in Statistics - Simulation and Computation}, in press.
 }
 
 
@@ -100,7 +99,7 @@ W=X+rlaplace(n,0,sigma_u/sqrt(2));
 hhxy = c(0.15, 1)
 ## Note you needs to use the following code to calculate bandwidth
 ## It is not run here due to the time constrain of runing examples. 
-#hhxy = modereg_bwSIMEX(Y, W, method="CV-density", p.order=0, 
+#hhxy = moderegbwSIMEX(Y, W, method="CV-density", p.order=0, 
 #                       sig=sigma_u, B=5, length.h=10)$bw;
 fit = modereg(Y, W, xgrid=xgrid, bw=hhxy, sig=sigma_u, p.order=0,
               PLOT=TRUE);

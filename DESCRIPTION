@@ -1,16 +1,16 @@
 Package: lpme
 Type: Package
-Title: Local Polynomial Estimators in Measurement Error Models
-Version: 1.1.0
-Date: 2017-3-23
+Title: Nonparametric Estimation of Measurement Error Models
+Version: 1.1.1
+Date: 2017-10-31
 Author: Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
 Maintainer: Haiming Zhou <zhouh@niu.edu>
-Description: Provide local polynomial estimators for nonparametric mean regression and nonparametric modal regression in the presence/absence of measurement error. Bandwidth selection is also provided for each estimator.
+Description: Provide nonparametric methods for mean regression model, modal regression and conditional density estimation in the presence/absence of measurement error. Bandwidth selection is also provided for each method.
 License: GPL (>= 2)
 Depends: R (>= 3.0.2)
-Imports: Rcpp (>= 0.11.1), decon, flexmix
+Imports: Rcpp (>= 0.11.1), decon, flexmix, splines, locpol
 LinkingTo: Rcpp, RcppArmadillo (>= 0.4.300.0)
 NeedsCompilation: yes
-Packaged: 2017-03-23 21:06:44 UTC; Haiming
+Packaged: 2017-10-31 15:57:50 UTC; Haiming
 Repository: CRAN
-Date/Publication: 2017-03-24 06:25:37 UTC
+Date/Publication: 2017-10-31 21:31:42 UTC

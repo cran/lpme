@@ -5,6 +5,23 @@ using namespace arma;
 using namespace Rcpp;
 using namespace std;
 
+// second-order Kernel K
+RcppExport SEXP Kern_2nd_order(SEXP x_){
+  NumericVector x(x_);
+  int n = x.size();
+  NumericVector res(n);
+  for(int i=0; i<n; ++i){
+    double xi = std::abs(x[i]);
+    if(xi<0.2){
+      res[i] = 0.1455068+0.0000996*xi+ -0.0084387*std::pow(xi,2);
+    }else{
+      res[i] = 48.0*std::cos(xi)/(PI*std::pow(xi,4))*(1.0-15.0/std::pow(xi,2)) - 
+        144*std::sin(xi)/(PI*std::pow(xi,5))*(2.0-5.0/std::pow(xi,2));
+    }
+  }
+  return wrap(res);
+}
+
 // estimate conditional density without measurement error, local constant
 RcppExport SEXP LCfitDensityReg(SEXP X_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_, SEXP h2_, SEXP mx_){
   BEGIN_RCPP
@@ -50,6 +67,122 @@ RcppExport SEXP LCfitDensityReg(SEXP X_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_, SE
         Ku0xGy=0;
         for(int i=0; i<n; ++i){
           Ku0xGy += Ku0ij(i, ii)*exp( -0.5*std::pow(((Y[i]-y[jj]+mx[ii])/h2), 2) )/sqrt2pi;
+        }
+        if(Ku0xGy<0){
+          res(ii, jj) = 0.0;
+        }else{
+          res(ii, jj) = Ku0xGy/Ku0x/h2;
+        }
+      }
+    }
+  }
+  return List::create(Named("fitxy")=res);
+  END_RCPP
+}
+
+RcppExport SEXP LCfitDensityRegK(SEXP X_, SEXP Y_, SEXP x_, SEXP y_,
+                                    SEXP h1_, SEXP h2_, SEXP mx_){
+  BEGIN_RCPP
+  // Transfer R variables into C++;
+  NumericVector X(X_);
+  NumericVector Y(Y_);
+  NumericVector x(x_);
+  NumericVector y(y_);
+  NumericVector mx(mx_);
+  double h1=as<double>(h1_);
+  double h2=as<double>(h2_);
+  int nx = x.size();
+  int ny = y.size();
+  int n = X.size();
+  
+  // results to save 
+  arma::mat res(nx, ny);
+  
+  // temp variable
+  NumericMatrix Ku0ij(n,nx);
+  double Ku0x=0;
+  double Ku0xGy=0;
+  
+  // kernel for X
+  for(int i=0; i<n; ++i){
+    for(int j=0; j<nx; ++j){
+      Ku0ij(i,j) = K_sec_order((X[i]-x[j])/h1);
+    }
+  }
+  
+  // start estimate
+  double nh1 = (n+0.0)*h1;
+  for(int ii=0; ii<nx; ++ii){
+    R_CheckUserInterrupt();
+    Ku0x=0;
+    for(int i=0; i<n; ++i){
+      Ku0x += Ku0ij(i,ii);
+    }
+    if((Ku0x/nh1)<1e-10){
+      (res.row(ii)).fill(0);
+    }else{
+      for(int jj=0; jj<ny; ++jj){
+        Ku0xGy=0;
+        for(int i=0; i<n; ++i){
+          Ku0xGy += Ku0ij(i, ii)*exp( -0.5*std::pow(((Y[i]-y[jj]+mx[ii])/h2), 2) )/sqrt2pi;
+        }
+        if(Ku0xGy<0){
+          res(ii, jj) = 0.0;
+        }else{
+          res(ii, jj) = Ku0xGy/Ku0x/h2;
+        }
+      }
+    }
+  }
+  return List::create(Named("fitxy")=res);
+  END_RCPP
+}
+
+RcppExport SEXP LCfitDensityRegKK(SEXP X_, SEXP Y_, SEXP x_, SEXP y_,
+                                    SEXP h1_, SEXP h2_, SEXP mx_){
+  BEGIN_RCPP
+  // Transfer R variables into C++;
+  NumericVector X(X_);
+  NumericVector Y(Y_);
+  NumericVector x(x_);
+  NumericVector y(y_);
+  NumericVector mx(mx_);
+  double h1=as<double>(h1_);
+  double h2=as<double>(h2_);
+  int nx = x.size();
+  int ny = y.size();
+  int n = X.size();
+  
+  // results to save 
+  arma::mat res(nx, ny);
+  
+  // temp variable
+  NumericMatrix Ku0ij(n,nx);
+  double Ku0x=0;
+  double Ku0xGy=0;
+  
+  // kernel for X
+  for(int i=0; i<n; ++i){
+    for(int j=0; j<nx; ++j){
+      Ku0ij(i,j) = K_sec_order((X[i]-x[j])/h1);
+    }
+  }
+  
+  // start estimate
+  double nh1 = (n+0.0)*h1;
+  for(int ii=0; ii<nx; ++ii){
+    R_CheckUserInterrupt();
+    Ku0x=0;
+    for(int i=0; i<n; ++i){
+      Ku0x += Ku0ij(i,ii);
+    }
+    if((Ku0x/nh1)<1e-10){
+      (res.row(ii)).fill(0);
+    }else{
+      for(int jj=0; jj<ny; ++jj){
+        Ku0xGy=0;
+        for(int i=0; i<n; ++i){
+          Ku0xGy += Ku0ij(i, ii)*K_sec_order((Y[i]-y[jj]+mx[ii])/h2);
         }
         if(Ku0xGy<0){
           res(ii, jj) = 0.0;
@@ -483,12 +616,18 @@ RcppExport SEXP LCfitDensityRegLap2(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_
     }
   }
   
-  // Find the support for CF of KK
+  // Find the support for CF of KK in the denominator
   int indexl = (int)(round(-1.0/h1/beta2+m_mid)); 
   int indexu = (int)(round(1.0/h1/beta2+m_mid)); 
-  arma::vec support = arma::ones<vec>(m);
-  for (int i=0; i<(indexl-1); ++i) {support[i]=0;}
-  for (int i=indexu; i<m; ++i) {support[i]=0;}
+  arma::vec support1 = arma::ones<vec>(m);
+  for (int i=0; i<(indexl-1); ++i) {support1[i]=0;}
+  for (int i=indexu; i<m; ++i) {support1[i]=0;}
+  // Find the support for CF of KK in the numerator
+  indexl = (int)(round(-2.0/h1/beta2+m_mid)); 
+  indexu = (int)(round(2.0/h1/beta2+m_mid)); 
+  arma::vec support2 = arma::ones<vec>(m);
+  for (int i=0; i<(indexl-1); ++i) {support2[i]=0;}
+  for (int i=indexu; i<m; ++i) {support2[i]=0;}
   // FfU
   NumericVector FfU=FuLap(output, sigU);
   arma::vec FfU2(FfU.begin(), FfU.size(), false);
@@ -501,31 +640,34 @@ RcppExport SEXP LCfitDensityRegLap2(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_
         Ku0x += Ku0ij(i,ii);
       }
       fWin[ii]=Ku0x/nh1;
-      if((Ku0x/nh1)<1e-10){
-        gfWin[ii]=0;
-      }else{
-        Ku0xGy=0;
-        for(int i=0; i<n; ++i){
-          Ku0xGy += Ku0ij(i, ii)*exp( -0.5*std::pow(((Y[i]-y[jj]+mx[ii])/h2), 2) )/sqrt2pi;
-        }
-        gfWin[ii]=Ku0xGy/Ku0x/h2;
+      Ku0xGy=0;
+      for(int i=0; i<n; ++i){
+        int indx = (int)(round((Y[i]-y[jj]+mx[ii])/h2/beta+m_mid));
+        double Ku0y = ((indx<=m) & (indx>=1))? Kinput[indx-1]:0;
+        //double Ku0y = exp( -0.5*std::pow(((Y[i]-y[jj]+mx[ii])/h2), 2) )/sqrt2pi;
+        Ku0xGy += Ku0ij(i, ii)*Ku0y;
       }
+      gfWin[ii]=Ku0xGy/nh1/h2;
     }
     // FFT for fW
-    arma::cx_vec FfW = beta*mcon%arma::fft( mcon%fWin )%support;
+    arma::cx_vec FfW = beta*mcon%arma::fft( mcon%fWin )%support1;
     // FFT for gfW
-    arma::cx_vec FgfW=beta*mcon%arma::fft( mcon%gfWin )%support;
+    arma::cx_vec FgfW=beta*mcon%arma::fft( mcon%gfWin )%support2;
     // inverse FFT to get fX
-    arma::cx_vec Fratio=(FfW/FfU2%support);
+    arma::cx_vec Fratio=(FfW/FfU2%support1);
     arma::cx_vec fXF = mcon/beta%arma::ifft( mcon%Fratio);
     // inverse FFT to get gX*fX
-    Fratio=(FgfW/FfU2%support);
+    Fratio=(FgfW/FfU2%support1);
     arma::cx_vec gfXF=mcon/beta%arma::ifft( mcon%Fratio);
     // estimate of gX 
     arma::vec ghat = arma::real(gfXF)/arma::real(fXF);
     for (int i=0; i<nx; ++i){
       int ind = (int)(x[i]/beta+m_mid)-1;
-      res(i,jj) = ghat[ind];
+      if(ghat[ind]<0.0){
+        res(i,jj)=0.0;
+      }else{
+        res(i,jj) = ghat[ind];
+      }
     }
   }
   return List::create(Named("fitxy")=res);

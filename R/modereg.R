@@ -1,4 +1,4 @@
-"modereg" <- function(Y, W, xgrid=NULL, nstart=4, bw=NULL, p.order=0, sig=NULL, maxiter = 500, 
+"modereg" <- function(Y, W, bw, xgrid=NULL, sig=NULL, nstart=4, p.order=0, maxiter = 500, 
                       tol=.Machine$double.eps^0.25, mesh=NULL, PLOT=FALSE, ...){
   #########################################################################################
   # data structure
@@ -8,7 +8,7 @@
   if(is.null(bw)) stop("please specify the bandwidth vector bw");
   if(is.null(mesh)){
     if(is.null(xgrid)){
-      xgrid = seq(quantile(W, probs=0.025), quantile(W,probs=0.975), length.out = 300);
+      xgrid = seq(quantile(W, probs=0.025), quantile(W,probs=0.975), length.out = 100);
     }
     dd = cbind(W, Y);
     dd = dd[order(dd[,1]),];

@@ -7,8 +7,7 @@ This function provides both the DFC (Delaigle, Fan, and Carroll, 2009) and HZ (H
 }
    
 \usage{
-meanreg(Y, W, bw, method="HZ", sig=NULL, error="laplace", FT_fu,
-        xgrid=seq(min(W), max(W), length.out = 100))
+meanreg(Y, W, bw, xgrid=NULL, method="HZ", sig=NULL, error="laplace", FT_fu)
 }
 
 \arguments{
@@ -17,17 +16,16 @@ meanreg(Y, W, bw, method="HZ", sig=NULL, error="laplace", FT_fu,
    \item{W}{         an n by 1 predictor vector.} 
            
   \item{bw}{         bandwidth.} 
+  
+  \item{xgrid}{ the grid values to estimate the responses.}
     
     \item{method}{   the method to be used; \code{method="HZ"} returns the estimator proposed by Huang and Zhou (2017); \code{method="DFC"} returns the estimator proposed by Delaigle, Fan, and Carroll (2009); \code{method="naive"} returns the local linear estimator ignoring measurement error.}
 
-    \item{sig}{      standard deviation of the measurement error.}   
+    \item{sig}{      standard deviation of the measurement error; \code{sig=NULL} returns the naive estimators ignoring measurement error.}   
 
     \item{error}{    the distribution assumed for the measurement error; \code{error="laplace"} is for Laplace distribution; \code{error="normal"} is for Gaussian distribution; \code{error="user"} is for user-assumed distribution.} 
     
     \item{FT_fu}{    a function for the Fourier transform of density of error, which is required only when \code{error="user"}.} 
-    
-    \item{xgrid}{ the grid values to estimate the responses.}
-
 }
 
 \value{
@@ -35,13 +33,13 @@ The results include the grid points \code{xgrid} for predictor and corresponding
 }
 
 \seealso{
-\code{\link{meanreg_bwSIMEX}}
+\code{\link{meanregbwSIMEX}}
 }
 
 \references{
-Delaigle, A., Fan, J., and Carroll, R. (2009). A design-adaptive local polynomial estimator for the errors-in-variables problem. \emph{Journal of the American Statistical Association}, 104: 348-359.
+Huang, X. and Zhou, H. (2017). An alternative local polynomial estimator for the error-in-variables problem. \emph{Journal of Nonparametric Statistics}, 29: 301-325.
 
-Huang, X. and Zhou, H. (2017). An alternative local polynomial estimator for the error-in-variables problem. \emph{Journal of Nonparametric Statistics}, in press.
+Delaigle, A., Fan, J., and Carroll, R. (2009). A design-adaptive local polynomial estimator for the errors-in-variables problem. \emph{Journal of the American Statistical Association}, 104: 348-359.
 }
 
 

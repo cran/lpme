@@ -10,46 +10,48 @@ typedef Rcpp::NumericMatrix::iterator mat_iterator;
 using namespace Rcpp;
 
 // Fourier transform for error U
-NumericVector FuLap(NumericVector t, double sigU);
-NumericVector FuGau(NumericVector t, double sigU);
-NumericVector FuLapinv(NumericVector t, double sigU);
-NumericVector FuGauinv(NumericVector t, double sigU);
+Rcpp::NumericVector FuLap(Rcpp::NumericVector t, double sigU);
+Rcpp::NumericVector FuGau(Rcpp::NumericVector t, double sigU);
+Rcpp::NumericVector FuLapinv(Rcpp::NumericVector t, double sigU);
+Rcpp::NumericVector FuGauinv(Rcpp::NumericVector t, double sigU);
 // Fourier transform for Kernel K
-NumericVector FK(NumericVector t);
+Rcpp::NumericVector FK(Rcpp::NumericVector t);
 
 // first derivative for Fourier transform of Kernel K
-NumericVector FK1(NumericVector t);
+Rcpp::NumericVector FK1(Rcpp::NumericVector t);
 
 // second derivative for Fourier transform of Kernel K
-NumericVector FK2(NumericVector t);
+Rcpp::NumericVector FK2(Rcpp::NumericVector t);
 
+// second-order Kernel K
+double K_sec_order(double x);
 // Fourier transform for Kernel K
-NumericVector FK_sec_order(NumericVector t);
+Rcpp::NumericVector FK_sec_order(Rcpp::NumericVector t);
 // first derivative for Fourier transform of Kernel K
-NumericVector FK1_sec_order(NumericVector t);
+Rcpp::NumericVector FK1_sec_order(Rcpp::NumericVector t);
 // second derivative for Fourier transform of Kernel K
-NumericVector FK2_sec_order(NumericVector t);
+Rcpp::NumericVector FK2_sec_order(Rcpp::NumericVector t);
 
 // function to generate subvectors a[-(ind1:ind2)] and b[-(ind1:ind2)] and save them to w and y respectively
 // void allows more than two values can be returned. For example, w and y are returned here.
-void subvecij(const NumericVector& a, const NumericVector& b, int ind1, int ind2, NumericVector& w, NumericVector& y);
+void subvecij(const Rcpp::NumericVector& a, const Rcpp::NumericVector& b, int ind1, int ind2, Rcpp::NumericVector& w, Rcpp::NumericVector& y);
 
 // function to estimate ghat of x using JASA when U is Laplace
-void gjasaLap(NumericVector& res, const NumericVector& x, const NumericVector& t, double dt, const NumericVector& W, 
-      const NumericVector& Y, double sigU, double h);
+void gjasaLap(Rcpp::NumericVector& res, const Rcpp::NumericVector& x, const Rcpp::NumericVector& t, double dt, const Rcpp::NumericVector& W, 
+      const Rcpp::NumericVector& Y, double sigU, double h);
 
 // function to estimate ghat of x using JASA when U is Gaussian
-void gjasaGau(NumericVector& res, const NumericVector& x, const NumericVector& t, double dt, const NumericVector& W, 
-      const NumericVector& Y, double sigU, double h);
+void gjasaGau(Rcpp::NumericVector& res, const Rcpp::NumericVector& x, const Rcpp::NumericVector& t, double dt, const Rcpp::NumericVector& W, 
+      const Rcpp::NumericVector& Y, double sigU, double h);
 
 // function to estimate ghat of x using OURS
-void gnewLap(NumericVector& res, const NumericVector& x, const NumericVector& input, const NumericVector& output, 
-        double beta, double beta2, const NumericVector& mconst, const NumericVector& Kinput, 
-        const NumericVector& W, const NumericVector& Y, double sigU, double h);
+void gnewLap(Rcpp::NumericVector& res, const Rcpp::NumericVector& x, const Rcpp::NumericVector& input, const Rcpp::NumericVector& output, 
+        double beta, double beta2, const Rcpp::NumericVector& mconst, const Rcpp::NumericVector& Kinput, 
+        const Rcpp::NumericVector& W, const Rcpp::NumericVector& Y, double sigU, double h);
 
 // function to estimate ghat of x using OURS when error is Gaussian
-void gnewGau(NumericVector& ghatofx, const NumericVector& x, const NumericVector& input, const NumericVector& output, 
-        double beta, double beta2, const NumericVector& mconst, const NumericVector& Kinput, 
-        const NumericVector& W, const NumericVector& Y, double sigU, double h);
+void gnewGau(Rcpp::NumericVector& ghatofx, const Rcpp::NumericVector& x, const Rcpp::NumericVector& input, const Rcpp::NumericVector& output, 
+        double beta, double beta2, const Rcpp::NumericVector& mconst, const Rcpp::NumericVector& Kinput, 
+        const Rcpp::NumericVector& W, const Rcpp::NumericVector& Y, double sigU, double h);
 
 #endif
