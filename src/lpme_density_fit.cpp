@@ -1,5 +1,6 @@
 #include "lpme_common.h"
 #include <RcppArmadillo.h>
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 using namespace arma;
 using namespace Rcpp;
@@ -87,7 +88,7 @@ RcppExport SEXP fitDensitySecKLap(SEXP W_, SEXP x_, SEXP h1_, SEXP dt_, SEXP t_,
   if(ngrid<(n*nx)){
     NumericVector Ku0(ngrid);
     for(int i=0; i<ngrid; ++i){
-      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*PI);
+      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*M_PI);
     }
     for(int i=0; i<n; ++i){
       for(int j=0; j<nx; ++j){
@@ -98,7 +99,7 @@ RcppExport SEXP fitDensitySecKLap(SEXP W_, SEXP x_, SEXP h1_, SEXP dt_, SEXP t_,
   }else{
     for(int i=0; i<n; ++i){
       for(int j=0; j<nx; ++j){
-        Ku0ij(i,j) = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*PI);
+        Ku0ij(i,j) = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*M_PI);
       }
     }
   }
@@ -239,7 +240,7 @@ RcppExport SEXP fitDensitySecKLap2(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_,
   if(ngrid<(n*nx)){
     NumericVector Ku0(ngrid);
     for(int i=0; i<ngrid; ++i){
-      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*PI);
+      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*M_PI);
     }
     for(int i=0; i<n; ++i){
       for(int j=0; j<nx; ++j){
@@ -250,7 +251,7 @@ RcppExport SEXP fitDensitySecKLap2(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_,
   }else{
     for(int i=0; i<n; ++i){
       for(int j=0; j<nx; ++j){
-        Ku0ij(i,j) = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*PI);
+        Ku0ij(i,j) = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*M_PI);
       }
     }
   }

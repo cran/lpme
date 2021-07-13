@@ -62,7 +62,6 @@ Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
 ## X - True covariates
 ## W - Observed covariates
 ## Y - individual response
-rm(list=ls())
 library(lpme)
 ## generate laplace
 rlap=function (use.n, location = 0, scale = 1) 

@@ -52,7 +52,6 @@ Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
 ## X - True covariates
 ## W - Observed covariates
 ## Y - individual response
-rm(list=ls())
 library(lpme)
 
 ## sample size:

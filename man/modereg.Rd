@@ -3,7 +3,7 @@
 
 \title{Nonparametric Estimators for Nonparametric Mode Regression}
 \description{
-This function provides the nonparametric estimators (Zhou and Huang, 2016; Zhou and Huang, 2018) for nonparametric modal regression. The corresponding estimators in the absence of measurement error are also provided. 
+This function provides the nonparametric estimators (Zhou and Huang, 2016; Zhou and Huang, 2019) for nonparametric modal regression. The corresponding estimators in the absence of measurement error are also provided. 
 }
    
 \usage{
@@ -49,7 +49,7 @@ The results include the grid points \code{xgrid} for predictor, the number of mo
 \references{
 Zhou. H. and Huang, X. (2016). Nonparametric modal regression in the presence of measurement error. \emph{Electronic Journal of Statistics}, 10: 3579-3620.
 
-Zhou, H. and Huang, X. (2018). Bandwidth selection for nonparametric modal regression. \emph{Communications in Statistics - Simulation and Computation}, in press.
+Zhou, H. and Huang, X. (2019). Bandwidth selection for nonparametric modal regression. \emph{Communications in Statistics - Simulation and Computation}, 48(4): 968-984.
 }
 
 
@@ -58,7 +58,6 @@ Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
 }
 
 \examples{
-rm(list=ls())
 library(lpme)
 
 rlaplace=function (use.n, location = 0, scale = 1) 

@@ -24,9 +24,9 @@ moderegbwSIMEX(Y, W, method="CV-density", p.order=0, sig, B=5,
     
     \item{B}{        total number of cross-validation criteria to average over; defualt is 5.}
     
-   \item{h1}{       bandwidth vector for h1; default is \code{NULL}, and h1 is chosen automatically. See Zhou and Huang (2017) for details. It is recommended to carefully specify a fine grid for h1. }
+   \item{h1}{       bandwidth vector for h1; default is \code{NULL}, and h1 is chosen automatically. See Zhou and Huang (2016) for details. It is recommended to carefully specify a fine grid for h1. }
     
-    \item{h2}{      bandwidth vector for h2; default is \code{NULL}, and h2 is chosen automatically. See Zhou and Huang (2017) for details. It is recommended to carefully specify a fine grid for h2.}
+    \item{h2}{      bandwidth vector for h2; default is \code{NULL}, and h2 is chosen automatically. See Zhou and Huang (2016) for details. It is recommended to carefully specify a fine grid for h2.}
     
     \item{length.h}{ number of grid points for each of h1 and h2; default is 10.}
     
@@ -54,7 +54,6 @@ Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
 }
 
 \examples{
-rm(list=ls())
 library(lpme)
 
 rlaplace=function (use.n, location = 0, scale = 1) 

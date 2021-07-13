@@ -1,5 +1,6 @@
 #include "lpme_common.h"
 #include <RcppArmadillo.h>
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 using namespace arma;
 using namespace Rcpp;

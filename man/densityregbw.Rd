@@ -3,7 +3,7 @@
 
 \title{Bandwidth Selector for Conditional Density Estimation with Covariate Measurement Error}
 \description{
-This function selects the bandwidth for the nonparametric estimators (Huang and Zhou, 2018) for the density of a response conditioning on an error-prone covariate. The corresponding methods in the absence of measurement error are also provided. 
+This function selects the bandwidth for the nonparametric estimators (Huang and Zhou, 2020) for the density of a response conditioning on an error-prone covariate. The corresponding methods in the absence of measurement error are also provided. 
 }
    
 \usage{
@@ -43,7 +43,7 @@ The results include the bandwidth \code{bw}, grid values for h1 and grid values 
 }
 
 \references{
-Huang, X. and Zhou, H. (2018). Conditional density estimation with covariate measurement error. Submitted.
+Huang, X. and Zhou, H. (2020). Conditional density estimation with covariate measurement error. \emph{Electronic Journal of Statistics}, 14(1): 970-1023.
 }
 
 
@@ -56,7 +56,6 @@ Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
 ## X - True covariates
 ## W - Observed covariates
 ## Y - individual response
-rm(list=ls())
 library(lpme)
 ## generate laplace
 rlap=function (use.n, location = 0, scale = 1) 

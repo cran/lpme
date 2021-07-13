@@ -22,16 +22,15 @@
     if(is.null(sig)){
       if((K1=="Gauss")&(K2=="Gauss")){
         hxyhat = c(sdW*1.06, sdY*1.06)*n^(-1/5);
-        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 20 )
-        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 15 )
+        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 10 )
+        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 10 )
         hh = as.matrix( expand.grid(h1, h2) );
         resCV = .Call("CVdens_LCfit", W, Y, pW, h1, h2, PACKAGE = "lpme")$CV;
         hhxy = as.vector(hh[which.min(as.vector(resCV)),]); 
       }else if((K1=="SecOrder")&(K2=="Gauss")){
-        K1=="SecOrder"; K2=="Gauss"
         hxyhat = c(sdW*const, sdY*1.06)*n^(-1/5);
-        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 20 )
-        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 15 )
+        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 10 )
+        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 10 )
         hh = as.matrix( expand.grid(h1, h2) );
         resCV = .Call("CVdens_LCfit2", W, Y, pW, h1, h2, PACKAGE = "lpme")$CV;
         hhxy = as.vector(hh[which.min(as.vector(resCV)),]);
@@ -46,8 +45,8 @@
         corYW = abs(cor(Y,W))
         h_scale = (1+sqrt(1-lamhat)*corYW);
         hxyhat = c(sdW*const, sdY*1.06)*n^(-1/5);
-        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 20 )*h_scale
-        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 15 )
+        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 10 )*h_scale
+        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 10 )
         hh = as.matrix( expand.grid(h1, h2) );
         resCV = .Call("CVdens_LCfit2", W, Y, pW, h1/h_scale, h2, PACKAGE = "lpme")$CV;
         hhxy = as.vector(hh[which.min(as.vector(resCV)),]); 
@@ -75,23 +74,23 @@
         stop("It currently only supports mean.estimate='spline' or 'kernel'.")
       }
       if((K1=="SecOrder")&(K2=="SecOrder")){
-        hxyhat = c(sdW*const, sd(newY0)*const)*n^(-1/5);
-        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 20 )
-        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 15 )
+        hxyhat = c(sdW*const, sdY*const)*n^(-1/5);
+        if(is.null(h1)) h1 = hxyhat[1]*seq(0.5, 3, length.out = 10 )
+        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 10 )
         hh = as.matrix( expand.grid(h1, h2) );
         resCV = .Call("CVdens_LCfit2", W, newY0, pW, h1, h2*1.06/const, PACKAGE = "lpme")$CV;
         hhxy = as.vector(hh[which.min(as.vector(resCV)),]);
       }else if((K1=="SecOrder")&(K2=="Gauss")){
-        hxyhat = c(sdW*const, sd(newY0)*1.06)*n^(-1/5);
-        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 20 )
-        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 15 )
+        hxyhat = c(sdW*const, sdY*1.06)*n^(-1/5);
+        if(is.null(h1)) h1 = hxyhat[1]*seq(0.5, 3, length.out = 10 )
+        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 10 )
         hh = as.matrix( expand.grid(h1, h2) );
         resCV = .Call("CVdens_LCfit2", W, newY0, pW, h1, h2, PACKAGE = "lpme")$CV;
         hhxy = as.vector(hh[which.min(as.vector(resCV)),]);
       }else if((K1=="Gauss")&(K2=="Gauss")){
-        hxyhat = c(sdW*1.06, sd(newY0)*1.06)*n^(-1/5);
-        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 20 )
-        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 15 )
+        hxyhat = c(sdW*1.06, sdY*1.06)*n^(-1/5);
+        if(is.null(h1)) h1 = hxyhat[1]*seq(0.5, 3, length.out = 10 )
+        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 10 )
         hh = as.matrix( expand.grid(h1, h2) );
         resCV = .Call("CVdens_LCfit", W, newY0, pW, h1, h2, PACKAGE = "lpme")$CV;
         hhxy = as.vector(hh[which.min(as.vector(resCV)),]);
@@ -121,9 +120,9 @@
         lamhat = ((var(W)-sig^2))/var(W);
         corYW = abs(cor(newY0,W))
         h_scale = (1+sqrt(1-lamhat)*corYW);
-        hxyhat = c(sdW*const, sd(newY0)*const)*n^(-1/5);
-        if(is.null(h1)) h1 = hxyhat[1]*seq(0.2, 1.5, length.out = 20 )*h_scale
-        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 15 )
+        hxyhat = c(sdW*const, sdY*const)*n^(-1/5);
+        if(is.null(h1)) h1 = hxyhat[1]*seq(0.5, 3, length.out = 10 )*h_scale
+        if(is.null(h2)) h2 = hxyhat[2]*seq(0.2, 1.5, length.out = 10 )
         hh = as.matrix( expand.grid(h1, h2) );
         resCV = .Call("CVdens_LCfit2", W, newY0, pW, h1/h_scale, h2*1.06/const, PACKAGE = "lpme")$CV;
         hhxy = as.vector(hh[which.min(as.vector(resCV)),]);

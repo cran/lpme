@@ -1,5 +1,6 @@
 #include "lpme_common.h"
 #include <RcppArmadillo.h>
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 using namespace arma;
 using namespace Rcpp;
@@ -15,8 +16,8 @@ RcppExport SEXP Kern_2nd_order(SEXP x_){
     if(xi<0.2){
       res[i] = 0.1455068+0.0000996*xi+ -0.0084387*std::pow(xi,2);
     }else{
-      res[i] = 48.0*std::cos(xi)/(PI*std::pow(xi,4))*(1.0-15.0/std::pow(xi,2)) - 
-        144*std::sin(xi)/(PI*std::pow(xi,5))*(2.0-5.0/std::pow(xi,2));
+      res[i] = 48.0*std::cos(xi)/(M_PI*std::pow(xi,4))*(1.0-15.0/std::pow(xi,2)) - 
+        144*std::sin(xi)/(M_PI*std::pow(xi,5))*(2.0-5.0/std::pow(xi,2));
     }
   }
   return wrap(res);
@@ -302,7 +303,7 @@ RcppExport SEXP LCfitDensityRegLap(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_,
   if(ngrid<(n*nx)){
     NumericVector Ku0(ngrid);
     for(int i=0; i<ngrid; ++i){
-      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*PI);
+      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*M_PI);
     }
     for(int i=0; i<n; ++i){
       for(int j=0; j<nx; ++j){
@@ -313,7 +314,7 @@ RcppExport SEXP LCfitDensityRegLap(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_,
   }else{
     for(int i=0; i<n; ++i){
       for(int j=0; j<nx; ++j){
-        Ku0ij(i,j) = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*PI);
+        Ku0ij(i,j) = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*M_PI);
       }
     }
   }
@@ -389,7 +390,7 @@ RcppExport SEXP LCfitDensityRegLapLap(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h
   if(ngrid<(n*nx)){
     NumericVector Ku0(ngrid);
     for(int i=0; i<ngrid; ++i){
-      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*PI);
+      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*M_PI);
     }
     for(int i=0; i<n; ++i){
       for(int j=0; j<nx; ++j){
@@ -400,7 +401,7 @@ RcppExport SEXP LCfitDensityRegLapLap(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h
   }else{
     for(int i=0; i<n; ++i){
       for(int j=0; j<nx; ++j){
-        Ku0ij(i,j) = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*PI);
+        Ku0ij(i,j) = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*M_PI);
       }
     }
   }
@@ -422,7 +423,7 @@ RcppExport SEXP LCfitDensityRegLapLap(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h
   NumericVector Ku2_0(ngrid2);
   if(ngrid2<(n*nx*ny)){
     for(int i=0; i<ngrid2; ++i){
-      Ku2_0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FU2t)*dt/(2.0*PI);
+      Ku2_0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FU2t)*dt/(2.0*M_PI);
     }
   }
   
@@ -445,7 +446,7 @@ RcppExport SEXP LCfitDensityRegLapLap(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h
             int indx = round(std::abs(Y[i]-y[jj]+mx[ii])/h2/delta);
             Ku2_0Yymx=Ku2_0[indx];
           }else{
-            Ku2_0Yymx=Rcpp::sum(Rcpp::cos((Y[i]-y[jj]+mx[ii])/h2*t)*FKt_FU2t)*dt/(2.0*PI);
+            Ku2_0Yymx=Rcpp::sum(Rcpp::cos((Y[i]-y[jj]+mx[ii])/h2*t)*FKt_FU2t)*dt/(2.0*M_PI);
           }
           Ku0xGy += Ku0ij(i, ii)*Ku2_0Yymx;
         }
@@ -507,9 +508,9 @@ RcppExport SEXP LLfitDensityRegLap(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_,
     NumericVector Ku1(ngrid);
     NumericVector Ku2(ngrid);
     for(int i=0; i<ngrid; ++i){
-      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*PI);
-      Ku1[i] = -Rcpp::sum(Rcpp::sin((i+0.0)*delta*t)*FKt1_FUt)*dt/(2.0*PI);
-      Ku2[i] = -Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt2_FUt)*dt/(2.0*PI);
+      Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*M_PI);
+      Ku1[i] = -Rcpp::sum(Rcpp::sin((i+0.0)*delta*t)*FKt1_FUt)*dt/(2.0*M_PI);
+      Ku2[i] = -Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt2_FUt)*dt/(2.0*M_PI);
     }
     for(int j=0; j<nx; ++j){
       S1=0; S2=0;
@@ -532,10 +533,10 @@ RcppExport SEXP LLfitDensityRegLap(SEXP W_, SEXP Y_, SEXP x_, SEXP y_, SEXP h1_,
     for(int j=0; j<nx; ++j){
       S1=0; S2=0;
       for(int i=0; i<n; ++i){
-        K0i[i] = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*PI);
-        K1i[i] = -Rcpp::sum(Rcpp::sin((W[i]-x[j])/h1*t)*FKt1_FUt)*dt/(2.0*PI);
+        K0i[i] = Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt_FUt)*dt/(2.0*M_PI);
+        K1i[i] = -Rcpp::sum(Rcpp::sin((W[i]-x[j])/h1*t)*FKt1_FUt)*dt/(2.0*M_PI);
         S1 += K1i[i];
-        S2 += (-Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt2_FUt)*dt)/(2.0*PI);
+        S2 += (-Rcpp::sum(Rcpp::cos((W[i]-x[j])/h1*t)*FKt2_FUt)*dt)/(2.0*M_PI);
       }
       for(int i=0; i<n; ++i){
         Ku0ij(i,j) = (K0i[i]*S2 - K1i[i]*S1);

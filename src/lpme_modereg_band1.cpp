@@ -1,5 +1,6 @@
 #include "lpme_common.h"
 #include <RcppArmadillo.h>
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 using namespace arma;
 using namespace Rcpp;
@@ -35,10 +36,10 @@ RcppExport SEXP CVdens_LCfit(SEXP X_, SEXP Y_, SEXP pX_, SEXP h1_, SEXP h2_){
   NumericVector Ku0x(ngrid1+1);
   NumericVector intK2y(ngrid2+1);
   for(int i=0; i<=ngrid1; ++i){
-    Ku0x[i] = exp( -0.5*std::pow(((i+0.0)*delta),2) )/sqrt(2*PI);
+    Ku0x[i] = exp( -0.5*std::pow(((i+0.0)*delta),2) )/sqrt(2*M_PI);
   }
   for(int i=0; i<=ngrid2; ++i){
-    intK2y[i] = exp( -0.25*std::pow(((i+0.0)*delta),2) )/sqrt(4*PI);
+    intK2y[i] = exp( -0.25*std::pow(((i+0.0)*delta),2) )/sqrt(4*M_PI);
   }
   
   for(int k=0; k<nh1; ++k){
@@ -136,10 +137,10 @@ RcppExport SEXP CVdens_LCfit2(SEXP X_, SEXP Y_, SEXP pX_, SEXP h1_, SEXP h2_){
     Ku0x[i] = K_sec_order((i+0.0)*delta);
   }
   for(int i=0; i<=ngrid2; ++i){
-    intK2y[i] = exp( -0.25*std::pow(((i+0.0)*delta),2) )/sqrt(4*PI);
+    intK2y[i] = exp( -0.25*std::pow(((i+0.0)*delta),2) )/sqrt(4*M_PI);
   }
   for(int i=0; i<=ngrid3; ++i){
-    Ku0y[i] = exp( -0.5*std::pow(((i+0.0)*delta),2) )/sqrt(2*PI);
+    Ku0y[i] = exp( -0.5*std::pow(((i+0.0)*delta),2) )/sqrt(2*M_PI);
   }
   for(int k=0; k<nh1; ++k){
     for(int i=0; i<n; ++i){
@@ -231,10 +232,10 @@ RcppExport SEXP CVdens_LLfit(SEXP X_, SEXP Y_, SEXP pX_, SEXP h1_, SEXP h2_){
   NumericVector Ku0x(ngrid1+1);
   NumericVector intK2y(ngrid2+1);
   for(int i=0; i<=ngrid1; ++i){
-    Ku0x[i] = exp( -0.5*std::pow(((i+0.0)*delta),2) )/sqrt(2*PI);
+    Ku0x[i] = exp( -0.5*std::pow(((i+0.0)*delta),2) )/sqrt(2*M_PI);
   }
   for(int i=0; i<=ngrid2; ++i){
-    intK2y[i] = exp( -0.25*std::pow(((i+0.0)*delta),2) )/sqrt(4*PI);
+    intK2y[i] = exp( -0.25*std::pow(((i+0.0)*delta),2) )/sqrt(4*M_PI);
   }
   
   for(int k=0; k<nh1; ++k){

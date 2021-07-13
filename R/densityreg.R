@@ -7,10 +7,10 @@
   sdW = sd(W); sdY = sd(Y);
   #if(is.null(bw)) stop("please specify the bandwidth vector bw");
   if(is.null(xgrid)){
-    xgrid = seq(quantile(W, probs=0.025), quantile(W, probs=0.975), length.out = 200);
+    xgrid = seq(quantile(W, probs=0.025), quantile(W, probs=0.975), length.out = 100);
   }
   if(is.null(ygrid)){
-    ygrid = seq(quantile(Y, probs=0), quantile(Y, probs=1), length.out=200);
+    ygrid = seq(quantile(Y, probs=0), quantile(Y, probs=1), length.out=100);
   }
   nx	= length(xgrid)
   ny	= length(ygrid)

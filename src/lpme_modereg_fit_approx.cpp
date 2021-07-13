@@ -1,5 +1,6 @@
 #include "lpme_common.h"
 #include <RcppArmadillo.h>
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 using namespace arma;
 using namespace Rcpp;
@@ -31,10 +32,10 @@ RcppExport SEXP Ku_sec_order(SEXP ngrid_, SEXP delta_, SEXP h1_, SEXP sigU_, SEX
     NumericVector FKt1_FUt = FKt1*FUtinv;
     NumericVector FKt2_FUt = FKt2*FUtinv;
     for(int i=0; i<ngrid; ++i){
-      Ku0(i,k) = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*PI);
+      Ku0(i,k) = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*M_PI);
       //if(Ku0(i,k)<0) { Ku0(i,k)=0; break; }
-      Ku1(i,k) = -Rcpp::sum(Rcpp::sin((i+0.0)*delta*t)*FKt1_FUt)*dt/(2.0*PI);
-      Ku2(i,k) = -Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt2_FUt)*dt/(2.0*PI);
+      Ku1(i,k) = -Rcpp::sum(Rcpp::sin((i+0.0)*delta*t)*FKt1_FUt)*dt/(2.0*M_PI);
+      Ku2(i,k) = -Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt2_FUt)*dt/(2.0*M_PI);
     }
   }
   return List::create(Named("Ku0")=Ku0,
@@ -60,7 +61,7 @@ RcppExport SEXP Ku0_sec_order(SEXP ngrid_, SEXP delta_, SEXP h1_, SEXP sigU_, SE
   for(int k=0; k<nh1; ++k){
     NumericVector FKt_FUt = FKt*FuLapinv(t/h1[k], sigU);
     for(int i=0; i<ngrid; ++i){
-      Ku0(i,k) = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*PI);
+      Ku0(i,k) = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*M_PI);
       //if(Ku0(i,k)<0) { Ku0(i,k)=0; break; }
     }
   }
@@ -114,7 +115,7 @@ RcppExport SEXP LCfitModeRegLap2( SEXP x_, SEXP y_, SEXP yindx_, SEXP W_, SEXP Y
   //Rprintf( "iscan = %d\n", ngrid );
   NumericVector Ku0(ngrid);
   for(int i=0; i<ngrid; ++i){
-    Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*PI);
+    Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*M_PI);
     //if(Ku0[i]<0) { Ku0[i]=0; break; }
   }
   
@@ -219,10 +220,10 @@ RcppExport SEXP LLfitModeRegLap2( SEXP x_, SEXP y_, SEXP yindx_, SEXP W_, SEXP Y
   NumericVector Ku1(ngrid);
   NumericVector Ku2(ngrid);
   for(int i=0; i<ngrid; ++i){
-    Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*PI);
+    Ku0[i] = Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt_FUt)*dt/(2.0*M_PI);
     //if(Ku0[i]<0) { Ku0[i]=0; break; }
-    Ku1[i] = -Rcpp::sum(Rcpp::sin((i+0.0)*delta*t)*FKt1_FUt)*dt/(2.0*PI);
-    Ku2[i] = -Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt2_FUt)*dt/(2.0*PI);
+    Ku1[i] = -Rcpp::sum(Rcpp::sin((i+0.0)*delta*t)*FKt1_FUt)*dt/(2.0*M_PI);
+    Ku2[i] = -Rcpp::sum(Rcpp::cos((i+0.0)*delta*t)*FKt2_FUt)*dt/(2.0*M_PI);
   }
   
   for(int j=0; j<nx; ++j){

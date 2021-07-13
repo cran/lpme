@@ -1,5 +1,6 @@
 #include "lpme_common.h"
 #include <RcppArmadillo.h>
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 using namespace arma ;
 using namespace Rcpp ;
@@ -42,8 +43,8 @@ double K_sec_order(double x){
   if(xi<0.2){
     res = 0.1455068+0.0000996*xi+ -0.0084387*std::pow(xi,2);
   }else{
-    res = 48.0*std::cos(xi)/(PI*std::pow(xi,4))*(1.0-15.0/std::pow(xi,2)) - 
-      144*std::sin(xi)/(PI*std::pow(xi,5))*(2.0-5.0/std::pow(xi,2));
+    res = 48.0*std::cos(xi)/(M_PI*std::pow(xi,4))*(1.0-15.0/std::pow(xi,2)) - 
+      144*std::sin(xi)/(M_PI*std::pow(xi,5))*(2.0-5.0/std::pow(xi,2));
   }
   return(res);
 }
@@ -108,11 +109,11 @@ void gjasaLap(Rcpp::NumericVector& res, const Rcpp::NumericVector& x, const Rcpp
     Rcpp::NumericVector imxt = Rcpp::sin(x[i]*t/h);
     Rcpp::NumericVector tmp0 = rehatFW*rext + imhatFW*imxt;
     Rcpp::NumericVector tmp1 = rehatFW*imxt - imhatFW*rext;
-    double S0 = Rcpp::sum(tmp0*FKt/FUt)*dt/(n*h*2*PI);
-    double S1 = Rcpp::sum(tmp1*FKt1/FUt)*dt/(n*h*2*PI);
-    double S2 = -Rcpp::sum(tmp0*FKt2/FUt)*dt/(n*h*2*PI);
-    double T0 = Rcpp::sum((reYhatFW*rext + imYhatFW*imxt)*FKt/FUt)*dt/(n*h*2*PI);
-    double T1 = Rcpp::sum((reYhatFW*imxt - imYhatFW*rext)*FKt1/FUt)*dt/(n*h*2*PI);
+    double S0 = Rcpp::sum(tmp0*FKt/FUt)*dt/(n*h*2*M_PI);
+    double S1 = Rcpp::sum(tmp1*FKt1/FUt)*dt/(n*h*2*M_PI);
+    double S2 = -Rcpp::sum(tmp0*FKt2/FUt)*dt/(n*h*2*M_PI);
+    double T0 = Rcpp::sum((reYhatFW*rext + imYhatFW*imxt)*FKt/FUt)*dt/(n*h*2*M_PI);
+    double T1 = Rcpp::sum((reYhatFW*imxt - imYhatFW*rext)*FKt1/FUt)*dt/(n*h*2*M_PI);
     res[i] = (T0*S2-T1*S1)/(S0*S2-S1*S1+1e-30);
   }
 }
@@ -147,11 +148,11 @@ void gjasaGau(Rcpp::NumericVector& res, const Rcpp::NumericVector& x, const Rcpp
     Rcpp::NumericVector imxt = Rcpp::sin(x[i]*t/h);
     Rcpp::NumericVector tmp0 = rehatFW*rext + imhatFW*imxt;
     Rcpp::NumericVector tmp1 = -rehatFW*imxt + imhatFW*rext;
-    double S0 = Rcpp::sum(tmp0*FKt/FUt)*dt/(n*h*2*PI);
-    double S1 = Rcpp::sum(tmp1*FKt1/FUt)*dt/(n*h*2*PI);
-    double S2 = -Rcpp::sum(tmp0*FKt2/FUt)*dt/(n*h*2*PI);
-    double T0 = Rcpp::sum((reYhatFW*rext + imYhatFW*imxt)*FKt/FUt)*dt/(n*h*2*PI);
-    double T1 = Rcpp::sum((-reYhatFW*imxt + imYhatFW*rext)*FKt1/FUt)*dt/(n*h*2*PI);
+    double S0 = Rcpp::sum(tmp0*FKt/FUt)*dt/(n*h*2*M_PI);
+    double S1 = Rcpp::sum(tmp1*FKt1/FUt)*dt/(n*h*2*M_PI);
+    double S2 = -Rcpp::sum(tmp0*FKt2/FUt)*dt/(n*h*2*M_PI);
+    double T0 = Rcpp::sum((reYhatFW*rext + imYhatFW*imxt)*FKt/FUt)*dt/(n*h*2*M_PI);
+    double T1 = Rcpp::sum((-reYhatFW*imxt + imYhatFW*rext)*FKt1/FUt)*dt/(n*h*2*M_PI);
     res[i] = (T0*S2-T1*S1)/(S0*S2-S1*S1+1e-30);
   }
 }

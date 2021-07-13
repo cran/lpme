@@ -3,7 +3,7 @@
 
 \title{Cross-Validation Bandwidth Selector for Nonparametric Mode Regression}
 \description{
-This function selects the bandwidth (Zhou and Huang, 2018) for the local polynomial estimators for nonparametric modal regression in the absence of measurement error.}
+This function selects the bandwidth (Zhou and Huang, 2019) for the local polynomial estimators for nonparametric modal regression in the absence of measurement error.}
    
 \usage{
 moderegbw(Y, X, method="CV-density", p.order=0, h1=NULL, h2=NULL, nstart = 4,
@@ -16,13 +16,13 @@ moderegbw(Y, X, method="CV-density", p.order=0, h1=NULL, h2=NULL, nstart = 4,
    
    \item{X}{         an n by 1 predictor vector.} 
    
-   \item{method}{    \code{method="CV-density"} is for density-based CV; \code{method="CV-mode"} is for mode-based CV; \code{metohd="bootstrap"} is for a bootstap method; see Zhou and Huang (2017) for details. For non-measurement error models, \code{method="CV-mode"} is recommended.}
+   \item{method}{    \code{method="CV-density"} is for density-based CV; \code{method="CV-mode"} is for mode-based CV; \code{metohd="bootstrap"} is for a bootstap method; see Zhou and Huang (2019) for details. For non-measurement error models, \code{method="CV-mode"} is recommended.}
    
    \item{p.order}{   the order of polynomial, up to 1; \code{p.order=0} returns local constant estimators and \code{p.order=1} returns local linear estimators. }
    
-   \item{h1}{       bandwidth vector for h1; default is \code{NULL}, and h1 is chosen automatically. See Zhou and Huang (2017) for details. It is recommended to carefully specify a fine grid for h1. }
+   \item{h1}{       bandwidth vector for h1; default is \code{NULL}, and h1 is chosen automatically. See Zhou and Huang (2019) for details. It is recommended to carefully specify a fine grid for h1. }
     
-    \item{h2}{      bandwidth vector for h2; default is \code{NULL}, and h2 is chosen automatically. See Zhou and Huang (2017) for details. It is recommended to carefully specify a fine grid for h2.}
+    \item{h2}{      bandwidth vector for h2; default is \code{NULL}, and h2 is chosen automatically. See Zhou and Huang (2019) for details. It is recommended to carefully specify a fine grid for h2.}
     
     \item{nstart}{    the starting number of modes for each grid value.}
     
@@ -44,7 +44,7 @@ The results include the bandwidth \code{bw}.
 }
 
 \references{
-Zhou, H. and Huang, X. (2018). Bandwidth selection for nonparametric modal regression. \emph{Communications in Statistics - Simulation and Computation}, in press.
+Zhou, H. and Huang, X. (2019). Bandwidth selection for nonparametric modal regression. \emph{Communications in Statistics - Simulation and Computation}, 48(4): 968-984.
 }
 
 
@@ -53,7 +53,6 @@ Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
 }
 
 \examples{
-rm(list=ls())
 library(lpme)
 ## sample size:
 n =100;
