@@ -48,7 +48,7 @@ Huang, X. and Zhou, H. (2020). Conditional density estimation with covariate mea
 
 
 \author{
-Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
+Haiming Zhou and Xianzheng Huang
 }
 
 \examples{

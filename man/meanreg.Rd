@@ -44,7 +44,7 @@ Delaigle, A., Fan, J., and Carroll, R. (2009). A design-adaptive local polynomia
 
 
 \author{
-Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
+Haiming Zhou and Xianzheng Huang
 }
 
 \examples{

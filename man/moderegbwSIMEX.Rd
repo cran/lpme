@@ -50,7 +50,7 @@ Zhou. H. and Huang, X. (2016). Nonparametric modal regression in the presence of
 
 
 \author{
-Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
+Haiming Zhou and Xianzheng Huang
 }
 
 \examples{

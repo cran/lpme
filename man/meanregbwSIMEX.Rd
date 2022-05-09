@@ -54,7 +54,7 @@ Delaigle, A. and Hall, P. (2008). Using SIMEX for smoothing-parameter choice in 
 
 
 \author{
-Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
+Haiming Zhou and Xianzheng Huang
 }
 
 \examples{

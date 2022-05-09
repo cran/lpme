@@ -9,13 +9,11 @@ citEntry(entry = "Article",
   volume       = "10",
   number       = "2",
   pages        = "3579-3620",
-  url          = "http://dx.doi.org/10.1214/16-EJS1210",
 
   textVersion  =
   paste("Zhou, H. and Huang, X. (2016).",
         "Nonparametric modal regression in the presence of measurement error.",
-        "Electronic Journal of Statistics, 10(2): 3579-3620.",
-        "URL http://dx.doi.org/10.1214/16-EJS1210.")
+        "Electronic Journal of Statistics, 10(2): 3579-3620.")
 )
 
 citEntry(entry = "Article",
@@ -27,13 +25,11 @@ citEntry(entry = "Article",
   volume       = "29",
   number       = "2",
   pages        = "301-325",
-  url          = "http://dx.doi.org/10.1080/10485252.2017.1303060",
 
   textVersion  =
   paste("Huang, X. and Zhou, H. (2017).",
         "An alternative local polynomial estimator for the error-in-variables problem.",
-        "Journal of Nonparametric Statistics, 29(2): 301-325.",
-        "URL http://dx.doi.org/10.1080/10485252.2017.1303060.")
+        "Journal of Nonparametric Statistics, 29(2): 301-325.")
 )
 
 citEntry(entry = "Article",
@@ -41,25 +37,29 @@ citEntry(entry = "Article",
   author       = personList(as.person("Haiming Zhou"),
                    as.person("Xianzheng Huang")),
   journal      = "Communication in Statistics - Simulation and Computation",
-  year         = "2018",
-  volume       = "in press",
+  year         = "2019",
+  volume       = "48",
+  number       = "4",
+  pages        = "968-984",
 
   textVersion  =
-  paste("Zhou, H. and Huang, X. (2018).",
+  paste("Zhou, H. and Huang, X. (2019).",
         "Bandwidth selection for nonparametric modal regression.",
-        "Communication in Statistics - Simulation and Computation, in press.")
+        "Communication in Statistics - Simulation and Computation, 48(4): 968-984.")
 )
 
 citEntry(entry = "Article",
   title        = "Conditional density estimation with covariate measurement error",
   author       = personList(as.person("Xianzheng Huang"),
                    as.person("Haiming Zhou")),
-  journal      = "Journal",
-  year         = "2018",
-  number       = "submitted",
+  journal      = "Electronic Journal of Statistics",
+  year         = "2020",
+  volume       = "14",
+  number       = "1",
+  pages        = "970-1023",
 
   textVersion  =
-  paste("Huang, X. and Zhou, H. (2018).",
+  paste("Huang, X. and Zhou, H. (2020).",
         "Conditional density estimation with covariate measurement error.",
-        "Journal, submitted")
+        "Electronic Journal of Statistics, 14(1): 970-1023.")
 )

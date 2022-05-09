@@ -49,7 +49,7 @@ Zhou, H. and Huang, X. (2019). Bandwidth selection for nonparametric modal regre
 
 
 \author{
-Haiming Zhou <zhouh@niu.edu> and Xianzheng Huang <huang@stat.sc.edu>
+Haiming Zhou and Xianzheng Huang
 }
 
 \examples{
